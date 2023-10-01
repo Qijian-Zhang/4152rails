@@ -20,6 +20,22 @@ class Movie < ActiveRecord::Base
     return Movie.group('rating').count.keys()
   end
 
+  def self.sort_by_name(ratings_list)
+    if ratings_list.empty?
+      movies=Movie.order(:title)
+    else
+      movies = Movie.where(rating: ratings_list).order(:title)
+    end
+    return movies
+  end
 
+  def self.sort_by_time(ratings_list)
+    if ratings_list.empty?
+      movies=Movie.order(:release_date)
+    else
+      movies = Movie.where(rating: ratings_list).order(:release_date)
+    end
 
+    return movies
+  end
 end

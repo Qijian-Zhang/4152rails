@@ -11,6 +11,9 @@ class MoviesController < ApplicationController
     end
   end
 
+  def sortable_column_link
+  end
+
   def show
     id = params[:id] # retrieve movie ID from URI route
     @movie = Movie.find(id) # look up movie by unique ID
@@ -18,7 +21,15 @@ class MoviesController < ApplicationController
   end
 
   def index
-    @movies = Movie.with_ratings(@ratings_to_show)
+    if params[:sorted]
+      if params[:sorted] == 'title'
+        @movies=Movie.sort_by_name(@ratings_to_show)
+      else
+        @movies=Movie.sort_by_time(@ratings_to_show)
+      end
+    else
+      @movies = Movie.with_ratings(@ratings_to_show)
+    end
   end
 
   def new

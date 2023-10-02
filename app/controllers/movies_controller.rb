@@ -42,7 +42,7 @@ class MoviesController < ApplicationController
 
 
   def index
-    if params[:home]
+    if params[:commit]
       session[:rating]=@ratings_to_show
     else
       @ratings_to_show= session[:rating]

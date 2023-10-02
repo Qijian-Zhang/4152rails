@@ -11,6 +11,7 @@ class MoviesController < ApplicationController
     else
       @ratings_to_show = []
     end
+     
     
   end
 

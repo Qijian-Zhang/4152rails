@@ -7,13 +7,14 @@ class MoviesController < ApplicationController
 
     if params[:ratings]
       @ratings_to_show = params[:ratings].keys
+      session[:rating]=@ratings_to_show
     else
       @ratings_to_show = []
     end
+    
   end
 
-  def sortable_column_link
-  end
+
 
   def show
     id = params[:id] # retrieve movie ID from URI route
@@ -36,21 +37,26 @@ class MoviesController < ApplicationController
 
 
   def index
+    if params[:home]
+      session[:rating]=@ratings_to_show
+    else
+      @ratings_to_show= session[:rating]
+    end
     if params[:sorted]
       if params[:sorted] == 'title'
-        @movies=Movie.sort_by_name(@ratings_to_show)
+        @movies=Movie.sort_by_name(session[:rating])
         session[:sorted]=params[:sorted]
       else
-        @movies=Movie.sort_by_time(@ratings_to_show)
+        @movies=Movie.sort_by_time(session[:rating])
         session[:sorted]=params[:sorted]
       end
     else
       if session[:sorted] == 'title'
-        @movies=Movie.sort_by_name(@ratings_to_show)
+        @movies=Movie.sort_by_name(session[:rating])
       elsif session[:sorted] == 'time'
-        @movies=Movie.sort_by_time(@ratings_to_show)
+        @movies=Movie.sort_by_time(session[:rating])
       else
-        @movies = Movie.with_ratings(@ratings_to_show)
+        @movies = Movie.with_ratings(session[:rating])
       end
       
     end

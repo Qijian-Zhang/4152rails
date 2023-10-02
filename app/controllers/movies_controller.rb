@@ -10,9 +10,12 @@ class MoviesController < ApplicationController
       session[:rating]=@ratings_to_show
     else
       @ratings_to_show = []
+      if not session[:rating]
+        session[:rating]=@ratings_to_show
+      end
     end
      
-    
+
   end
 
 

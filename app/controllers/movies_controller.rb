@@ -46,6 +46,9 @@ class MoviesController < ApplicationController
     else
       @ratings_to_show= session[:rating]
     end
+
+
+
     if params[:sorted]
       if params[:sorted] == 'title'
         @movies=Movie.sort_by_name(session[:rating])
@@ -65,6 +68,9 @@ class MoviesController < ApplicationController
       
     end
 
+
+
+
     
 
     @selected_sort = session[:sorted]
@@ -81,7 +87,7 @@ class MoviesController < ApplicationController
   def create
     @movie = Movie.create!(movie_params)
     flash[:notice] = "#{@movie.title} was successfully created."
-    redirect_to movies_path
+    redirect_to movies_path(sorted: session[:sorted], ratings: session[:rating].each_with_object({}) { |rating, hash| hash[rating] = '1' })
   end
 
   def edit
@@ -99,7 +105,7 @@ class MoviesController < ApplicationController
     @movie = Movie.find(params[:id])
     @movie.destroy
     flash[:notice] = "Movie '#{@movie.title}' deleted."
-    redirect_to movies_path
+    redirect_to movies_path(sorted: session[:sorted], ratings: session[:rating].each_with_object({}) { |rating, hash| hash[rating] = '1' })
   end
 
   private

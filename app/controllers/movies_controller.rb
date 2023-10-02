@@ -1,6 +1,7 @@
 class MoviesController < ApplicationController
 
   before_action :set_ratings
+
   def set_ratings
     @all_ratings = Movie.all_ratings
 
@@ -20,16 +21,47 @@ class MoviesController < ApplicationController
     # will render app/views/movies/show.<extension> by default
   end
 
+  def column_header_class(sort_column)
+    classes = []
+
+    if @selected_sort == sort_column
+      classes << 'p-3 mb-2'
+      classes << 'hilite'
+      classes << 'bg-warning' 
+    end
+
+    classes.join(' ')
+  end
+
+
+
   def index
     if params[:sorted]
       if params[:sorted] == 'title'
         @movies=Movie.sort_by_name(@ratings_to_show)
+        session[:sorted]=params[:sorted]
       else
         @movies=Movie.sort_by_time(@ratings_to_show)
+        session[:sorted]=params[:sorted]
       end
     else
-      @movies = Movie.with_ratings(@ratings_to_show)
+      if session[:sorted] == 'title'
+        @movies=Movie.sort_by_name(@ratings_to_show)
+      elsif session[:sorted] == 'time'
+        @movies=Movie.sort_by_time(@ratings_to_show)
+      else
+        @movies = Movie.with_ratings(@ratings_to_show)
+      end
+      
     end
+
+    
+
+    @selected_sort = session[:sorted]
+    @title_css = column_header_class('title')
+    @time_css = column_header_class('time')
+
+
   end
 
   def new

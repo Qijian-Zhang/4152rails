@@ -21,7 +21,7 @@ class Movie < ActiveRecord::Base
   end
 
   def self.sort_by_name(ratings_list)
-    if ratings_list.empty?
+    if ratings_list.nil? or ratings_list.empty?
       movies=Movie.order(:title)
     else
       movies = Movie.where(rating: ratings_list).order(:title)
@@ -30,7 +30,7 @@ class Movie < ActiveRecord::Base
   end
 
   def self.sort_by_time(ratings_list)
-    if ratings_list.empty?
+    if ratings_list.nil? or ratings_list.empty?
       movies=Movie.order(:release_date)
     else
       movies = Movie.where(rating: ratings_list).order(:release_date)
